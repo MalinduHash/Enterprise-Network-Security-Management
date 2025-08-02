@@ -1,0 +1,131 @@
+Router 5
+
+interface GigabitEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.5.17 255.255.255.248
+!
+interface GigabitEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.5.1 255.255.255.248
+ ip access-group one out
+!
+interface GigabitEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 192.168.5.9 255.255.255.248
+!
+interface GigabitEthernet0/1
+ ip address 192.168.1.5 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ ip address 192.168.1.2 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ passive-interface GigabitEthernet0/0
+ network 192.168.1.0 0.0.0.3 area 0
+ network 192.168.5.16 0.0.0.7 area 0
+ network 192.168.5.0 0.0.0.7 area 0
+ network 192.168.5.8 0.0.0.7 area 0
+ network 192.168.1.4 0.0.0.3 area 0
+ network 2.2.2.2 0.0.0.0 area 0
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+ip access-list standard one
+ permit 192.168.10.0 0.0.0.255
+ permit 192.168.20.0 0.0.0.255
+ permit 192.168.40.0 0.0.0.31
+ permit 192.168.40.32 0.0.0.31
+ deny any
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+ntp server 192.168.5.10
+!
+
+Router 2
+
+interface Loopback0
+ ip address 3.3.3.3 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip address 192.168.1.6 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1.40
+ encapsulation dot1Q 40
+ ip address 192.168.40.1 255.255.255.224
+!
+interface GigabitEthernet0/1.50
+ encapsulation dot1Q 50
+ ip address 192.168.40.33 255.255.255.224
+!
+interface GigabitEthernet0/1.60
+ encapsulation dot1Q 60
+ ip address 192.168.40.65 255.255.255.224
+!
+interface GigabitEthernet0/2
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ passive-interface GigabitEthernet0/1
+ network 192.168.1.4 0.0.0.3 area 0
+ network 192.168.40.0 0.0.0.31 area 0
+ network 192.168.40.32 0.0.0.31 area 0
+ network 192.168.40.64 0.0.0.31 area 0
+ network 3.3.3.3 0.0.0.0 area 0
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+ntp server 192.168.5.10
